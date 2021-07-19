@@ -228,8 +228,6 @@ void MOTT::SampleSignalIfDetected()
 
 		if(IsSignalDetected(sample))
 		{
-		  Serial.println("Recibo signal");
-		  Serial.println("------------------");
 		  BeginSamplingTimer();
 		}
        
