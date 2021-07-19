@@ -262,7 +262,7 @@ bool MOTT::SamplingEnded()
 	return reading_ended == false;
 }
 
-void MOTT::StartSampling()
+void MOTT::ResumeSampling()
 {
 	//Delay para asegurar de que el pin este quieto pasado la onda
     delay(TIMER_TIME_IN_MS);

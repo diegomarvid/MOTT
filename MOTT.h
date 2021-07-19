@@ -48,7 +48,7 @@ class MOTT
 	void SendSignal(char* string);
 	void SampleSignalIfDetected();
 	void ObtainSample(char *string);
-	void StartSampling();
+	void ResumeSampling();
 	bool SamplingEnded();
 	void EnableSampling();
 	void DisableSampling();
