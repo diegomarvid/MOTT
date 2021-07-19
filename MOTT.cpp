@@ -5,7 +5,6 @@
 MOTT::MOTT()
 {
 	TIMER_TIME = 1L*ms;
-	TIMER_TIME_IN_MS = TIMER_TIME / ms;
 	SIGNAL_SIZE = SIGNAL_MAX_SIZE;
 	
 	RX_SIGNAL_PIN = 7;
@@ -268,7 +267,7 @@ bool MOTT::SamplingEnded()
 void MOTT::ResumeSampling()
 {
 	//Delay para asegurar de que el pin este quieto pasado la onda
-    delay(TIMER_TIME_IN_MS);
+    delayMicroseconds(TIMER_TIME);
     reading_ended = true;
 	reading_signal = false;
 

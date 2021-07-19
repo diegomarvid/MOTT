@@ -11,8 +11,7 @@ class MOTT
 	static unsigned const int SIGNAL_MAX_SIZE = 7*50;
 	
 	unsigned long TIMER_TIME;
-	unsigned long TIMER_TIME_IN_MS;
-
+	
 	int SIGNAL_SIZE;
 	bool signal[SIGNAL_MAX_SIZE];
 	
