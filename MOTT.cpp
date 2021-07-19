@@ -180,7 +180,7 @@ void MOTT::ReadBit()
   //Obtener el largo en bytes
   if(i > 0 && i < 8)
   {
-    largo += (1 << (7 - i)) * digitalRead(RX_SIGNAL_PIN);
+    largo += (1 << (7 - i)) * !digitalRead(RX_SIGNAL_PIN);
   }
 
   //Setear la variable al largo en bits
@@ -192,7 +192,7 @@ void MOTT::ReadBit()
   //Leer el payload
   if(i >= 8)
   {
-    signal[i-8] = digitalRead(RX_SIGNAL_PIN);
+    signal[i-8] = !digitalRead(RX_SIGNAL_PIN);
   }
 
 
@@ -216,7 +216,7 @@ void MOTT::BeginSamplingTimer()
 	if(sending == true) return;
 	
 	//Delay para muestrear en el centro del simbolo
-	delayMicroseconds(TIMER_TIME / 4);
+	delayMicroseconds(TIMER_TIME / 2);
 	Timer1.restart();  
 	reading_signal = true;
 }
@@ -240,7 +240,7 @@ void MOTT::SampleSignalIfDetected()
 
 bool MOTT::IsSignalDetected(int sample)
 {
-  return sample == 1 && reading_ended;
+  return sample == 0 && reading_ended;
 }
 
 void MOTT::WaitForSignalEndingAfterInterrupt(char* string)
