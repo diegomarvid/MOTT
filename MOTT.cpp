@@ -111,7 +111,9 @@ void MOTT::SetBitTime(double time_in_ms, void (*f)())
   
   TIMER_TIME = time_in_ms * ms;
   
-  Serial.println(TIMER_TIME);
+  Serial.print("Velocidad: ");
+  Serial.print(TIMER_TIME);
+  Serial.println(" us/bit");
 
   Timer1.initialize(TIMER_TIME);  
 
