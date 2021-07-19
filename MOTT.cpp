@@ -211,8 +211,9 @@ void MOTT::BeginSamplingTimer()
 {
 
 	if(sending == true) return;
+	
 	//Delay para muestrear en el centro del simbolo
-	delay(TIMER_TIME_IN_MS / 4);
+	delayMicroseconds(TIMER_TIME / 4);
 	Timer1.restart();  
 	reading_signal = true;
 }
@@ -247,7 +248,7 @@ void MOTT::WaitForSignalEndingAfterInterrupt(char* string)
 
     SplitSignalIntoArrays(string);
     //Delay para asegurar de que el pin este quieto pasado la onda
-    delay(TIMER_TIME_IN_MS);
+    delayMicroseconds(TIMER_TIME);
     reading_ended = true;
 
   }
