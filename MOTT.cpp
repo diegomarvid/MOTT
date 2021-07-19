@@ -105,11 +105,13 @@ void MOTT::SendBit()
   
 }
 
-void MOTT::SetBitTime(unsigned long time_in_ms, void (*f)())
+void MOTT::SetBitTime(double time_in_ms, void (*f)())
 {
   Timer1.attachInterrupt(f) ;
   
   TIMER_TIME = time_in_ms * ms;
+  
+  Serial.println(TIMER_TIME);
 
   Timer1.initialize(TIMER_TIME);  
 

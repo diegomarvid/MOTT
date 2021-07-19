@@ -44,7 +44,7 @@ class MOTT
     MOTT();    
 	void SetTxPin(int pin);
 	void SetRxPin(int pin);
-	void SetBitTime(unsigned long time_in_ms, void (*f)());
+	void SetBitTime(double time_in_ms, void (*f)());
 	void SendSignal(char* string);
 	void SampleSignalIfDetected();
 	void ObtainSample(char *string);
