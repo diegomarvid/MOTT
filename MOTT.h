@@ -9,8 +9,11 @@ class MOTT
 {
 	static unsigned const long ms = 1000L;
 	static unsigned const int SIGNAL_MAX_SIZE = 7*50;
+	static unsigned const long CARRIER_TIME = 13L;
 	
 	unsigned long TIMER_TIME;
+	unsigned long CARRIER_CYCLES;
+	unsigned long counter;
 	
 	int SIGNAL_SIZE;
 	bool signal[SIGNAL_MAX_SIZE];
@@ -21,6 +24,7 @@ class MOTT
 	unsigned int i;
 	
 	bool sending;
+	bool output;
 	
 	//---------------------//
 	int largo;

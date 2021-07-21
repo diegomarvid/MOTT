@@ -5,6 +5,8 @@
 MOTT::MOTT()
 {
 	TIMER_TIME = 1L*ms;
+	CARRIER_CYCLES = TIMER_TIME / CARRIER_TIME;
+
 	SIGNAL_SIZE = SIGNAL_MAX_SIZE;
 	
 	RX_SIGNAL_PIN = 7;
@@ -12,6 +14,8 @@ MOTT::MOTT()
 	
 	i = 0;
 	sending = false;
+	output = true;
+	counter = 0;
 	
 	largo = 0;
 	reading_signal = false;
@@ -85,22 +89,41 @@ void MOTT::SendSignal(char* string)
 
 void MOTT::SendBit()
 {
-  if(i < SIGNAL_SIZE)
-  {
-    digitalWrite(TX_SIGNAL_PIN,signal[i]);
-    //Serial.println(signal[i]);
-  }
-  
-  i++;
+	
+	if(i < SIGNAL_SIZE)
+	{
+		if(signal[i] == 1)
+		{
+		  digitalWrite(TX_SIGNAL_PIN,output);
+		  Serial.print(output);
+		  output = !output;
+		}else{
+		  Serial.print(0);
+		  if(counter == 0){
+			digitalWrite(TX_SIGNAL_PIN, 0);
+		  }
+		}
+    }
 
-  if(i == SIGNAL_SIZE + 1) 
+    if(counter == CARRIER_CYCLES - 1)
+    {
+      counter = 0;
+      i++;
+      Serial.println("");
+    } else{
+      counter++;
+    }
+	
+	 if(i == SIGNAL_SIZE) 
   {
       sending = false;
       i = 0;
+      //Serial.println("Dejo de enviar");
       digitalWrite(TX_SIGNAL_PIN,0);
       Timer1.stop();
       
   } 
+	
   
 }
 
@@ -109,10 +132,14 @@ void MOTT::SetBitTime(double time_in_ms, void (*f)())
   Timer1.attachInterrupt(f) ;
   
   TIMER_TIME = time_in_ms * ms;
+  CARRIER_CYCLES = TIMER_TIME / CARRIER_TIME; 
   
   Serial.print("Velocidad: ");
   Serial.print(TIMER_TIME);
   Serial.println(" us/bit");
+  
+  Serial.print("Carrier cycles: ");
+  Serial.println(CARRIER_CYCLES);
 
   Timer1.initialize(TIMER_TIME);  
 
