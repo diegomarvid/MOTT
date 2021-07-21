@@ -181,6 +181,7 @@ void MOTT::ReadBit()
   if(i > 0 && i < 8)
   {
     largo += (1 << (7 - i)) * digitalRead(RX_SIGNAL_PIN);
+	//Serial.println(digitalRead(RX_SIGNAL_PIN));
   }
 
   //Setear la variable al largo en bits
