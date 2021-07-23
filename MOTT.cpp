@@ -95,10 +95,10 @@ void MOTT::SendBit()
 		if(signal[i] == 1)
 		{
 		  digitalWrite(TX_SIGNAL_PIN,output);
-		  Serial.print(output);
+		  //Serial.print(output);
 		  output = !output;
 		}else{
-		  Serial.print(0);
+		  //Serial.print(0);
 		  if(counter == 0){
 			digitalWrite(TX_SIGNAL_PIN, 0);
 		  }
@@ -141,7 +141,7 @@ void MOTT::SetBitTime(double time_in_ms, void (*f)())
   Serial.print("Carrier cycles: ");
   Serial.println(CARRIER_CYCLES);
 
-  Timer1.initialize(TIMER_TIME);  
+  Timer1.initialize(CARRIER_TIME);  
 
   Timer1.stop();
 }
