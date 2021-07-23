@@ -2,8 +2,6 @@
 #define MOTT_h
 
 #include "Arduino.h"
-#include <TimerOne.h>
-
 
 class MOTT
 {
