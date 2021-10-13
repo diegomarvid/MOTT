@@ -84,7 +84,7 @@ void MOTT::SendSignal(char* string)
 	
 	CreateBitSignalFromCharArray(string);
 	sending = true;
-	Timer1.restart();
+	StartTimer();
 }
 
 void MOTT::SendBit()
@@ -109,7 +109,7 @@ void MOTT::SendBit()
     {
       counter = 0;
       i++;
-      Serial.println("");
+      //Serial.println("");
     } else{
       counter++;
     }
@@ -120,18 +120,32 @@ void MOTT::SendBit()
       i = 0;
       //Serial.println("Dejo de enviar");
       digitalWrite(TX_SIGNAL_PIN,0);
-      Timer1.stop();
+      EndTimer();
       
   } 
 	
   
 }
 
+void MOTT::StartTimer() {
+  timer = timerBegin(0, 2, true); // timer_id = 0; divider=80; countUp = true;
+  timerAttachInterrupt(timer, callback, true); // edge = true
+
+  timerAlarmWrite(timer, tick_count, true);  //1000 ms
+  timerAlarmEnable(timer);
+}
+
+void MOTT::EndTimer() {
+  timerEnd(timer);
+  timer = NULL; 
+}
+
 void MOTT::SetBitTime(double time_in_ms, void (*f)())
 {
-  Timer1.attachInterrupt(f) ;
+  //Timer1.attachInterrupt(f) ;
   
   TIMER_TIME = time_in_ms * ms;
+  tick_count = 40 *  13;
   CARRIER_CYCLES = TIMER_TIME / CARRIER_TIME; 
   
   Serial.print("Velocidad: ");
@@ -141,9 +155,14 @@ void MOTT::SetBitTime(double time_in_ms, void (*f)())
   Serial.print("Carrier cycles: ");
   Serial.println(CARRIER_CYCLES);
 
-  Timer1.initialize(CARRIER_TIME);  
+  Serial.print("Tick count: ");
+  Serial.println(tick_count);
 
-  Timer1.stop();
+  callback = f;
+
+  //StartTimer(time_in_ms, f);
+
+  //EndTimer();
 }
 
 
@@ -234,7 +253,7 @@ void MOTT::ReadBit()
 
     SIGNAL_SIZE = SIGNAL_MAX_SIZE;
     i = 0;
-    Timer1.stop();
+    EndTimer();
   }
 }
 
@@ -245,7 +264,7 @@ void MOTT::BeginSamplingTimer()
 	
 	//Delay para muestrear en el centro del simbolo
 	delayMicroseconds(TIMER_TIME / 4);
-	Timer1.restart();  
+	StartTimer();  
 	reading_signal = true;
 }
 

@@ -7,7 +7,13 @@ class MOTT
 {
 	static unsigned const long ms = 1000L;
 	static unsigned const int SIGNAL_MAX_SIZE = 7*50;
-	static unsigned const long CARRIER_TIME = 15L;
+	static unsigned const long CARRIER_TIME = 13L;
+
+	hw_timer_t * timer = NULL;
+
+	void (*callback)();
+	int time_in_ms;
+	unsigned long tick_count;
 	
 	unsigned long TIMER_TIME;
 	unsigned long CARRIER_CYCLES;
@@ -40,6 +46,8 @@ class MOTT
 	void BeginSamplingTimer();
 	void SendBit();
 	void ReadBit();
+	void StartTimer();
+	void EndTimer();
 	
   public:
     MOTT();    
