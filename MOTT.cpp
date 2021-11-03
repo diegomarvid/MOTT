@@ -43,7 +43,7 @@ void MOTT::HandleInterrupt()
 	
 }
 
-int MOTT::CreateBitSignalFromCharArray(char* string)
+int MOTT::CreateBitSignalFromCharArray(const char* string)
 {
 	
   int len = strlen(string);
@@ -78,7 +78,7 @@ int MOTT::CreateBitSignalFromCharArray(char* string)
   return BitLength;
 }
 
-void MOTT::SendSignal(char* string)
+void MOTT::SendSignal(const char* string)
 {
 	if(sending == true || reading_signal == true) return;
 	
@@ -142,27 +142,50 @@ void MOTT::EndTimer() {
 
 void MOTT::SetBitTime(double time_in_ms, void (*f)())
 {
-  //Timer1.attachInterrupt(f) ;
   
+  
+  //Pasar tiempo a us
   TIMER_TIME = time_in_ms * ms;
-  tick_count = 40 *  13;
+
+  //Cantidad de ciclos por bit
   CARRIER_CYCLES = TIMER_TIME / CARRIER_TIME; 
-  
-  Serial.print("Velocidad: ");
+
+  //Cuantos ticks equivale a 13 us para modular en 38KHz
+  float MODULATION_FREQUENCY_KHZ = 38.0;
+
+  float CARRIER_BIT_TIME_US = 500.0 / (MODULATION_FREQUENCY_KHZ);
+
+  tick_count = 40 *  (int) CARRIER_BIT_TIME_US; 
+
+
+  Serial.println("---------------------------------------");
+
+  Serial.print("Frecuencia de modulacion: ");
+  Serial.print(MODULATION_FREQUENCY_KHZ);
+  Serial.println(" KHz");
+
+  Serial.print("Velocidad Bit Modulacion: ");
+  Serial.print(CARRIER_BIT_TIME_US);
+  Serial.println(" us");
+
+  Serial.print("Velocidad de bit: ");
   Serial.print(TIMER_TIME);
   Serial.println(" us/bit");
   
   Serial.print("Carrier cycles: ");
   Serial.println(CARRIER_CYCLES);
 
+  Serial.print("Velocidad de bit real: ");
+  Serial.print((float) CARRIER_CYCLES * CARRIER_BIT_TIME_US);
+  Serial.println(" us/bit");
+
   Serial.print("Tick count: ");
   Serial.println(tick_count);
 
+  Serial.println("---------------------------------------");
+
   callback = f;
 
-  //StartTimer(time_in_ms, f);
-
-  //EndTimer();
 }
 
 

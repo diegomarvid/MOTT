@@ -39,7 +39,7 @@ class MOTT
   private:
 	char ConvertBoolArrayToChar(bool arr[]);
     void ConvertCharToBoolArray(char c, bool* newSignal);
-	int CreateBitSignalFromCharArray(char* string);
+	int CreateBitSignalFromCharArray(const char* string);
 	void SplitSignalIntoArrays(char* string);
 	bool IsSignalDetected(int sample);
 	void WaitForSignalEndingAfterInterrupt(char* string);
@@ -54,7 +54,7 @@ class MOTT
 	void SetTxPin(int pin);
 	void SetRxPin(int pin);
 	void SetBitTime(double time_in_ms, void (*f)());
-	void SendSignal(char* string);
+	void SendSignal(const char* string);
 	void SampleSignalIfDetected();
 	void ObtainSample(char *string);
 	void ResumeSampling();
