@@ -95,10 +95,10 @@ void MOTT::SendBit()
 		if(signal[i] == 1)
 		{
 		  digitalWrite(TX_SIGNAL_PIN,output);
-		  //Serial.print(output);
+		  Serial.print(output);
 		  output = !output;
 		}else{
-		  //Serial.print(0);
+		  Serial.print(0);
 		  if(counter == 0){
 			digitalWrite(TX_SIGNAL_PIN, 0);
 		  }
@@ -109,7 +109,7 @@ void MOTT::SendBit()
     {
       counter = 0;
       i++;
-      //Serial.println("");
+      Serial.println("");
     } else{
       counter++;
     }
@@ -144,14 +144,21 @@ void MOTT::EndTimer() {
   timer = NULL; 
 }
 
+int MOTT::RoundFloatToInt(float number)
+{
+  if (number < 0)
+  {
+    return (int) number - 0.5;
+  } else{
+    return (int) (number + 0.5);
+  }
+}
+
 void MOTT::SetBitTime(double time_in_ms, void (*f)())
 {
   
   //Pasar tiempo a us
   TIMER_TIME = time_in_ms * ms;
-
-  //Cantidad de ciclos por bit
-  CARRIER_CYCLES = TIMER_TIME / CARRIER_TIME; 
 
   //Cuantos ticks equivale a 13 us para modular en 38KHz
   float MODULATION_FREQUENCY_KHZ = 38.0;
@@ -163,6 +170,9 @@ void MOTT::SetBitTime(double time_in_ms, void (*f)())
   float REAL_CARRIER_BIT_TIME_US = (float) tick_count / 40.0;
 
   float REAL_MODULATION_FREQUENCY_KHZ = 500.0 / REAL_CARRIER_BIT_TIME_US;
+
+  //Cantidad de ciclos por bit
+  CARRIER_CYCLES = RoundFloatToInt(TIMER_TIME / REAL_CARRIER_BIT_TIME_US); 
 
   Serial.println("---------------------------------------");
 

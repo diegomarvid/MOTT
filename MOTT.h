@@ -37,6 +37,7 @@ class MOTT
 	bool samplingEnable;
   
   private:
+  	int RoundFloatToInt(float number);
 	char ConvertBoolArrayToChar(bool arr[]);
     void ConvertCharToBoolArray(char c, bool* newSignal);
 	int CreateBitSignalFromCharArray(const char* string);
