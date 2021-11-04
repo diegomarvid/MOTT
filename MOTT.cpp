@@ -51,11 +51,14 @@ int MOTT::CreateBitSignalFromCharArray(char* string)
   //Flag para recepcion
   signal[0] = 1;
 
+  Serial.print(signal[0]);
+
   //Codificar el largo del payload en bits
   ConvertCharToBoolArray((char) len, auxiliar_array);
   
   for(int i = 1; i < 8; i++){
     signal[i] = auxiliar_array[i-1];
+    Serial.print(signal[i]);
   }
 
   //Codificar el payload en bits
@@ -66,8 +69,11 @@ int MOTT::CreateBitSignalFromCharArray(char* string)
     for(int j = h*7 + 1; j < h*7 + 8; j++)
     {
       signal[j] = auxiliar_array[j - h*7 - 1];
+      Serial.print(signal[j]);
     }   
   }
+
+  Serial.println("");
   
   SIGNAL_SIZE = BitLength;
   
