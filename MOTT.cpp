@@ -89,6 +89,21 @@ void MOTT::SendSignal(char* string)
 	Timer1.restart();
 }
 
+void MOTT::SendBitSignal(bool* boolSignal, int len)
+{
+	if(sending == true || reading_signal == true) return;
+	
+  for(int i = 0; i < len; i++){
+    signal[i] = boolSignal[i];
+    Serial.print(signal[i]);
+  }
+
+  Serial.println("");
+	
+	sending = true;
+	Timer1.restart();
+}
+
 void MOTT::SendBit()
 {
   if(i < SIGNAL_SIZE)
