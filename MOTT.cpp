@@ -128,10 +128,14 @@ void MOTT::SendBit()
 }
 
 void MOTT::StartTimer() {
-  timer = timerBegin(0, 2, true); // timer_id = 0; divider=80; countUp = true;
+
+  //Freq clock 80 MHz
+  //Con divider 2 queda en 40MHz la frecuencia
+
+  timer = timerBegin(0, 2, true); // timer_id = 0; divider=2; countUp = true;
   timerAttachInterrupt(timer, callback, true); // edge = true
 
-  timerAlarmWrite(timer, tick_count, true);  //1000 ms
+  timerAlarmWrite(timer, tick_count, true);
   timerAlarmEnable(timer);
 }
 
@@ -142,7 +146,6 @@ void MOTT::EndTimer() {
 
 void MOTT::SetBitTime(double time_in_ms, void (*f)())
 {
-  
   
   //Pasar tiempo a us
   TIMER_TIME = time_in_ms * ms;
@@ -155,32 +158,40 @@ void MOTT::SetBitTime(double time_in_ms, void (*f)())
 
   float CARRIER_BIT_TIME_US = 500.0 / (MODULATION_FREQUENCY_KHZ);
 
-  tick_count = 40 *  (int) CARRIER_BIT_TIME_US; 
+  tick_count = (int) (40.0 * CARRIER_BIT_TIME_US); 
 
+  float REAL_CARRIER_BIT_TIME_US = (float) tick_count / 40.0;
+
+  float REAL_MODULATION_FREQUENCY_KHZ = 500.0 / REAL_CARRIER_BIT_TIME_US;
 
   Serial.println("---------------------------------------");
 
+  // Serial.print("Frecuencia de modulacion: ");
+  // Serial.print(MODULATION_FREQUENCY_KHZ);
+  // Serial.println(" KHz");
+
+  // Serial.print("Velocidad Bit Modulacion: ");
+  // Serial.print(CARRIER_BIT_TIME_US);
+  // Serial.println(" us");
+
+  // Serial.print("Velocidad de bit: ");
+  // Serial.print(TIMER_TIME);
+  // Serial.println(" us/bit");
+
   Serial.print("Frecuencia de modulacion: ");
-  Serial.print(MODULATION_FREQUENCY_KHZ);
+  Serial.print(REAL_MODULATION_FREQUENCY_KHZ);
   Serial.println(" KHz");
 
   Serial.print("Velocidad Bit Modulacion: ");
-  Serial.print(CARRIER_BIT_TIME_US);
-  Serial.println(" us");
+  Serial.print(REAL_CARRIER_BIT_TIME_US);
+  Serial.println( " us/bit");
 
-  Serial.print("Velocidad de bit: ");
-  Serial.print(TIMER_TIME);
+  Serial.print("Velocidad de bit de signal: ");
+  Serial.print((float) CARRIER_CYCLES * REAL_CARRIER_BIT_TIME_US);
   Serial.println(" us/bit");
   
   Serial.print("Carrier cycles: ");
   Serial.println(CARRIER_CYCLES);
-
-  Serial.print("Velocidad de bit real: ");
-  Serial.print((float) CARRIER_CYCLES * CARRIER_BIT_TIME_US);
-  Serial.println(" us/bit");
-
-  Serial.print("Tick count: ");
-  Serial.println(tick_count);
 
   Serial.println("---------------------------------------");
 
