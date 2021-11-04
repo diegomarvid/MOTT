@@ -14,6 +14,7 @@ class MOTT
 	void (*callback)();
 	int time_in_ms;
 	unsigned long tick_count;
+	unsigned long sampling_tick_count;
 	
 	unsigned long TIMER_TIME;
 	unsigned long CARRIER_CYCLES;
@@ -48,6 +49,7 @@ class MOTT
 	void SendBit();
 	void ReadBit();
 	void StartTimer();
+	void StartSamplingTimer();
 	void EndTimer();
 	
   public:

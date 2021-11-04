@@ -139,6 +139,18 @@ void MOTT::StartTimer() {
   timerAlarmEnable(timer);
 }
 
+void MOTT::StartSamplingTimer() {
+
+  //Freq clock 80 MHz
+  //Con divider 2 queda en 40MHz la frecuencia
+
+  timer = timerBegin(0, 2, true); // timer_id = 0; divider=2; countUp = true;
+  timerAttachInterrupt(timer, callback, true); // edge = true
+
+  timerAlarmWrite(timer, sampling_tick_count, true);
+  timerAlarmEnable(timer);
+}
+
 void MOTT::EndTimer() {
   timerEnd(timer);
   timer = NULL; 
@@ -166,6 +178,8 @@ void MOTT::SetBitTime(double time_in_ms, void (*f)())
   float CARRIER_BIT_TIME_US = 500.0 / (MODULATION_FREQUENCY_KHZ);
 
   tick_count = (int) (40.0 * CARRIER_BIT_TIME_US); 
+
+  sampling_tick_count = (int) (40.0 * TIMER_TIME);
 
   float REAL_CARRIER_BIT_TIME_US = (float) tick_count / 40.0;
 
@@ -249,6 +263,7 @@ void MOTT::SplitSignalIntoArrays(char* string)
     for(int j = h*7; j < h*7 + 7; j++)
     {
       auxiliar_array[ j - h*7 ] = signal[j];
+      Serial.println(signal[j]);
     }
 
     string[h] = ConvertBoolArrayToChar(auxiliar_array);
@@ -308,7 +323,7 @@ void MOTT::BeginSamplingTimer()
 	
 	//Delay para muestrear en el centro del simbolo
 	delayMicroseconds(TIMER_TIME / 4);
-	StartTimer();  
+	StartSamplingTimer();  
 	reading_signal = true;
 }
 
