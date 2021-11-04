@@ -217,6 +217,10 @@ void MOTT::SetBitTime(double time_in_ms, void (*f)())
   Serial.print("Carrier cycles: ");
   Serial.println(CARRIER_CYCLES);
 
+  Serial.print("Tick count: ");
+  Serial.println(sampling_tick_count);
+  
+
   Serial.println("---------------------------------------");
 
   callback = f;
@@ -375,13 +379,14 @@ void MOTT::ResumeSampling()
 	//Delay para asegurar de que el pin este quieto pasado la onda
     delayMicroseconds(TIMER_TIME);
     reading_ended = true;
-	reading_signal = false;
+	  reading_signal = false;
 
 }
 
 void MOTT::ObtainSample(char *string)
 {
 	SplitSignalIntoArrays(string);
+  Serial.println(largo);
 }
 
 void MOTT::EnableSampling()
