@@ -95,10 +95,8 @@ void MOTT::SendBit()
 		if(signal[i] == 1)
 		{
 		  digitalWrite(TX_SIGNAL_PIN,output);
-		  Serial.print(output);
 		  output = !output;
 		}else{
-		  Serial.print(0);
 		  if(counter == 0){
 			digitalWrite(TX_SIGNAL_PIN, 0);
 		  }
@@ -109,7 +107,6 @@ void MOTT::SendBit()
     {
       counter = 0;
       i++;
-      Serial.println("");
     } else{
       counter++;
     }
@@ -267,7 +264,7 @@ void MOTT::SplitSignalIntoArrays(char* string)
     for(int j = h*7; j < h*7 + 7; j++)
     {
       auxiliar_array[ j - h*7 ] = signal[j];
-      Serial.println(signal[j]);
+      // Serial.println(signal[j]);
     }
 
     string[h] = ConvertBoolArrayToChar(auxiliar_array);
@@ -281,35 +278,40 @@ void MOTT::SplitSignalIntoArrays(char* string)
 
 void MOTT::ReadBit()
 {
-  if(i == 0)
-  {
-    largo = 0;
-  }
+  // if(i == 0)
+  // {
+  //   largo = 0;
+  //   Serial.println(digitalRead(RX_SIGNAL_PIN));
+  // }
 
   //Obtener el largo en bytes
-  if(i > 0 && i < 8)
+  if(i >= 0 && i < 7)
   {
+    //Serial.println("Calculo largo");
     largo += (1 << (7 - i)) * digitalRead(RX_SIGNAL_PIN);
-	//Serial.println(digitalRead(RX_SIGNAL_PIN));
+	  // Serial.println(digitalRead(RX_SIGNAL_PIN));
   }
 
   //Setear la variable al largo en bits
-  if(i == 8)
+  if(i == 7)
   {
     SIGNAL_SIZE = largo * 7;
+    // SIGNAL_SIZE = 2;
+
   }
 
   //Leer el payload
-  if(i >= 8)
+  if(i >= 7)
   {
-    signal[i-8] = digitalRead(RX_SIGNAL_PIN);
+    //Serial.println("Calculo payload");
+    signal[i-7] = digitalRead(RX_SIGNAL_PIN);
+    // Serial.println(digitalRead(RX_SIGNAL_PIN));
   }
 
-
-  i++;
+  // Serial.println(i);
 
   //Finaliza la lectura
-  if(i == SIGNAL_SIZE + 1 + 7)
+  if(i == SIGNAL_SIZE + 6)
   {
     reading_signal = false;
     reading_ended = false;
@@ -318,6 +320,8 @@ void MOTT::ReadBit()
     i = 0;
     EndTimer();
   }
+
+    i++;
 }
 
 void MOTT::BeginSamplingTimer()
@@ -327,6 +331,7 @@ void MOTT::BeginSamplingTimer()
 	
 	//Delay para muestrear en el centro del simbolo
 	delayMicroseconds(TIMER_TIME / 4);
+  // delayMicroseconds(1000);
 	StartSamplingTimer();  
 	reading_signal = true;
 }
@@ -386,7 +391,7 @@ void MOTT::ResumeSampling()
 void MOTT::ObtainSample(char *string)
 {
 	SplitSignalIntoArrays(string);
-  Serial.println(largo);
+  // Serial.println(largo);
 }
 
 void MOTT::EnableSampling()
