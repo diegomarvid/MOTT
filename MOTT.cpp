@@ -278,40 +278,29 @@ void MOTT::SplitSignalIntoArrays(char* string)
 
 void MOTT::ReadBit()
 {
-  // if(i == 0)
-  // {
-  //   largo = 0;
-  //   Serial.println(digitalRead(RX_SIGNAL_PIN));
-  // }
 
   //Obtener el largo en bytes
   if(i >= 0 && i < 7)
   {
-    //Serial.println("Calculo largo");
     largo += (1 << (7 - i)) * digitalRead(RX_SIGNAL_PIN);
-	  // Serial.println(digitalRead(RX_SIGNAL_PIN));
   }
 
   //Setear la variable al largo en bits
   if(i == 7)
   {
     SIGNAL_SIZE = largo * 7;
-    // SIGNAL_SIZE = 2;
-
   }
 
   //Leer el payload
   if(i >= 7)
   {
-    //Serial.println("Calculo payload");
     signal[i-7] = digitalRead(RX_SIGNAL_PIN);
-    // Serial.println(digitalRead(RX_SIGNAL_PIN));
   }
 
-  // Serial.println(i);
+   i++;
 
   //Finaliza la lectura
-  if(i == SIGNAL_SIZE + 6)
+  if(i == SIGNAL_SIZE + 7)
   {
     reading_signal = false;
     reading_ended = false;
@@ -321,7 +310,7 @@ void MOTT::ReadBit()
     EndTimer();
   }
 
-    i++;
+   
 }
 
 void MOTT::BeginSamplingTimer()
