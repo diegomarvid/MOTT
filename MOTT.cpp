@@ -55,11 +55,14 @@ int MOTT::CreateBitSignalFromCharArray(const char* string)
   //Flag para recepcion
   signal[0] = 1;
 
+  Serial.print(signal[0]);
+
   //Codificar el largo del payload en bits
   ConvertCharToBoolArray((char) len, auxiliar_array);
   
   for(int i = 1; i < 8; i++){
     signal[i] = auxiliar_array[i-1];
+    Serial.print(signal[i]);
   }
 
   //Codificar el payload en bits
@@ -70,10 +73,13 @@ int MOTT::CreateBitSignalFromCharArray(const char* string)
     for(int j = h*7 + 1; j < h*7 + 8; j++)
     {
       signal[j] = auxiliar_array[j - h*7 - 1];
+      Serial.print(signal[j]);
     }   
   }
   
   SIGNAL_SIZE = BitLength;
+
+  Serial.println("");
   
   return BitLength;
 }
@@ -138,6 +144,8 @@ void MOTT::StartTimer() {
 
 void MOTT::StartSamplingTimer() {
 
+  //Serial.println("Arranco timer");
+
   //Freq clock 80 MHz
   //Con divider 2 queda en 40MHz la frecuencia
 
@@ -149,6 +157,7 @@ void MOTT::StartSamplingTimer() {
 }
 
 void MOTT::EndTimer() {
+  //Serial.println("Termino timer");
   timerEnd(timer);
   timer = NULL; 
 }
@@ -282,7 +291,7 @@ void MOTT::ReadBit()
   //Obtener el largo en bytes
   if(i >= 0 && i < 7)
   {
-    largo += (1 << (7 - i)) * digitalRead(RX_SIGNAL_PIN);
+    largo += (1 << (7 - i)) * !digitalRead(RX_SIGNAL_PIN);
   }
 
   //Setear la variable al largo en bits
@@ -294,7 +303,7 @@ void MOTT::ReadBit()
   //Leer el payload
   if(i >= 7)
   {
-    signal[i-7] = digitalRead(RX_SIGNAL_PIN);
+    signal[i-7] = !digitalRead(RX_SIGNAL_PIN);
   }
 
    i++;
@@ -344,7 +353,7 @@ void MOTT::SampleSignalIfDetected()
 
 bool MOTT::IsSignalDetected(int sample)
 {
-  return sample == 1 && reading_ended;
+  return sample == 0 && reading_ended;
 }
 
 void MOTT::WaitForSignalEndingAfterInterrupt(char* string)
