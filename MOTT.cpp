@@ -313,9 +313,9 @@ void MOTT::ReadBit()
   {
     reading_signal = false;
     reading_ended = false;
-
     SIGNAL_SIZE = SIGNAL_MAX_SIZE;
     i = 0;
+    largo = 0;
     EndTimer();
   }
 
