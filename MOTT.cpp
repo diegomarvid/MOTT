@@ -291,7 +291,7 @@ void MOTT::ReadBit()
   //Obtener el largo en bytes
   if(i >= 0 && i < 7)
   {
-    largo += (1 << (7 - i)) * !digitalRead(RX_SIGNAL_PIN);
+    largo += (1 << (6 - i)) * !digitalRead(RX_SIGNAL_PIN);
   }
 
   //Setear la variable al largo en bits
@@ -315,7 +315,6 @@ void MOTT::ReadBit()
     reading_ended = false;
     SIGNAL_SIZE = SIGNAL_MAX_SIZE;
     i = 0;
-    largo = 0;
     EndTimer();
   }
 
@@ -383,6 +382,7 @@ void MOTT::ResumeSampling()
     delayMicroseconds(TIMER_TIME);
     reading_ended = true;
 	  reading_signal = false;
+    largo = 0;
 
 }
 
