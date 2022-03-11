@@ -193,43 +193,43 @@ void MOTT::SplitSignalIntoArrays(char* string)
 
 void MOTT::ReadBit()
 {
-  if(i == 0)
-  {
-    largo = 0;
-  }
 
-  //Obtener el largo en bytes
-  if(i > 0 && i < 8)
+  //Serial.println("Reading bit");
+
+   //Obtener el largo en bytes
+  if(i >= 1 && i < 8)
   {
-    largo += (1 << (7 - i)) * digitalRead(RX_SIGNAL_PIN);
-	//Serial.println(digitalRead(RX_SIGNAL_PIN));
+    largo += (1 << (7 - i)) * !digitalRead(RX_SIGNAL_PIN);
   }
 
   //Setear la variable al largo en bits
   if(i == 8)
   {
+    if(largo == 0){
+      largo = 1;
+    }
     SIGNAL_SIZE = largo * 7;
+    
   }
 
   //Leer el payload
   if(i >= 8)
   {
-    signal[i-8] = digitalRead(RX_SIGNAL_PIN);
+    signal[i-8] = !digitalRead(RX_SIGNAL_PIN);
   }
 
-
-  i++;
+   i++;
 
   //Finaliza la lectura
-  if(i == SIGNAL_SIZE + 1 + 7)
+  if(i == SIGNAL_SIZE + 8)
   {
     reading_signal = false;
     reading_ended = false;
-
     SIGNAL_SIZE = SIGNAL_MAX_SIZE;
     i = 0;
     Timer1.stop();
   }
+  
 }
 
 void MOTT::BeginSamplingTimer()
@@ -262,7 +262,7 @@ void MOTT::SampleSignalIfDetected()
 
 bool MOTT::IsSignalDetected(int sample)
 {
-  return sample == 1 && reading_ended;
+  return sample == 0 && reading_ended;
 }
 
 void MOTT::WaitForSignalEndingAfterInterrupt(char* string)
@@ -289,9 +289,10 @@ bool MOTT::SamplingEnded()
 void MOTT::ResumeSampling()
 {
 	//Delay para asegurar de que el pin este quieto pasado la onda
-    delayMicroseconds(TIMER_TIME);
-    reading_ended = true;
-	reading_signal = false;
+  delayMicroseconds(TIMER_TIME);
+  reading_ended = true;
+  reading_signal = false;
+  largo = 0;
 
 }
 

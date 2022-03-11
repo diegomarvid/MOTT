@@ -8,7 +8,7 @@
 class MOTT
 {
 	static unsigned const long ms = 1000L;
-	static unsigned const int SIGNAL_MAX_SIZE = 7*50;
+	static unsigned const int SIGNAL_MAX_SIZE = 7*140;
 	
 	unsigned long TIMER_TIME;
 	
