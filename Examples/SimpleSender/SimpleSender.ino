@@ -12,6 +12,8 @@ void setup() {
   mott.SetTxPin(TX_SIGNAL_PIN);
   mott.SetBitTime(0.080L, Callback);
 
+
+
   Serial.println("Loading up...");
 
   Serial.println("Sending signal in 3 seconds");

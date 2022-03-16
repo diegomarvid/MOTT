@@ -25,7 +25,8 @@ void Callback()
   mott.HandleInterrupt();
 }
 
-char string[25];
+
+char string[127];
 
 void loop() {
   

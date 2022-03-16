@@ -26,11 +26,13 @@ MOTT::MOTT()
 void MOTT::SetTxPin(int pin)
 {
 	TX_SIGNAL_PIN = pin;
+  pinMode(TX_SIGNAL_PIN, OUTPUT);
 }
 
 void MOTT::SetRxPin(int pin)
 {
 	RX_SIGNAL_PIN = pin;
+  pinMode(RX_SIGNAL_PIN, INPUT);
 }
 
 void MOTT::HandleInterrupt()
@@ -83,6 +85,8 @@ int MOTT::CreateBitSignalFromCharArray(const char* string)
   
   return BitLength;
 }
+
+// Cambiar a bool?
 
 void MOTT::SendSignal(const char* string)
 {
@@ -172,14 +176,23 @@ int MOTT::RoundFloatToInt(float number)
   }
 }
 
-void MOTT::SetBitTime(double time_in_ms, void (*f)())
+void MOTT::SetCarrierFrequencyKHz(float freq)
+{
+  MODULATION_FREQUENCY_KHZ = freq;
+}
+
+void MOTT::SetCallback(void (*f)())
+{
+   callback = f;
+}
+
+void MOTT::SetBitTime(double time_in_ms)
 {
   
   //Pasar tiempo a us
   TIMER_TIME = time_in_ms * ms;
 
   //Cuantos ticks equivale a 13 us para modular en 38KHz
-  float MODULATION_FREQUENCY_KHZ = 38.0;
 
   float CARRIER_BIT_TIME_US = 500.0 / (MODULATION_FREQUENCY_KHZ);
 
@@ -228,8 +241,6 @@ void MOTT::SetBitTime(double time_in_ms, void (*f)())
   
 
   Serial.println("---------------------------------------");
-
-  callback = f;
 
 }
 

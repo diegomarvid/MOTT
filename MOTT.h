@@ -9,6 +9,8 @@ class MOTT
 	static unsigned const int SIGNAL_MAX_SIZE = 7*128;
 	static unsigned const long CARRIER_TIME = 13L;
 
+	float MODULATION_FREQUENCY_KHZ = 38.0;
+
 	hw_timer_t * timer = NULL;
 
 	void (*callback)();
@@ -56,7 +58,9 @@ class MOTT
     MOTT();    
 	void SetTxPin(int pin);
 	void SetRxPin(int pin);
-	void SetBitTime(double time_in_ms, void (*f)());
+	void SetCarrierFrequencyKHz(float frequency);
+	void SetCallback(void (*f)());
+	void SetBitTime(double time_in_ms);
 	void SendSignal(const char* string);
 	void SampleSignalIfDetected();
 	void ObtainSample(char *string);
