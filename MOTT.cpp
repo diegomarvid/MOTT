@@ -308,6 +308,8 @@ void MOTT::ReadBit()
   //Setear la variable al largo en bits
   if(i == 7)
   {
+    //Serial.println(largo);
+    if(largo == 0) {largo = 1;}
     SIGNAL_SIZE = largo * 7;
   }
 
@@ -322,6 +324,7 @@ void MOTT::ReadBit()
   //Finaliza la lectura
   if(i == SIGNAL_SIZE + 7)
   {
+    //Serial.println("Finaliza recepcion");
     reading_signal = false;
     reading_ended = false;
     SIGNAL_SIZE = SIGNAL_MAX_SIZE;
